@@ -33,9 +33,11 @@ for ABI in $ABIS; do
     -DCMAKE_SHARED_LINKER_FLAGS="-ldl -llog"
   cmake --build "build-$ABI" -j"$(nproc)"
 
-  LIB="$(find "$GL4ES_DIR/lib" "build-$ABI" -name 'libGL.so' 2>/dev/null | head -n1)"
+  # GL4ES names its output libGL.so.1 (it appends ".1" to the suffix), so match
+  # any libGL.so* regular file. It is renamed to libgl4es.so below.
+  LIB="$(find "$GL4ES_DIR/lib" "build-$ABI" -name 'libGL.so*' -type f 2>/dev/null | head -n1)"
   if [ -z "$LIB" ]; then
-    echo "libGL.so not found for $ABI. Libraries present:"
+    echo "libGL.so* not found for $ABI. Libraries present:"
     find "$GL4ES_DIR/lib" "build-$ABI" -name '*.so*' 2>/dev/null || true
     exit 1
   fi
