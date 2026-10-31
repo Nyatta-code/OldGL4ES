@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pure native plugin: no Java/Kotlin code, no activity. -->
+    <application
+        android:label="@string/app_name"
+        android:hasCode="false"
+        android:allowBackup="false"
+        android:extractNativeLibs="true">
+
+        <!-- Tells Fold Craft Launcher / ZalithLauncher 2 that this APK is a renderer plugin. -->
+        <meta-data android:name="fclPlugin" android:value="true" />
+        <meta-data android:name="zalithRendererPlugin" android:value="true" />
+
+        <!-- Format: "<display name>:<GL library>:<EGL library>" -->
+        <meta-data
+            android:name="renderer"
+            android:value="OldGL4ES (1.12.2):libgl4es.so:libEGL.so" />
+
+        <!-- Environment injected by the launcher, KEY=VALUE pairs separated by ":".
+             Tuned for old Minecraft (1.8 - 1.16) on a weak Adreno 610 / Snapdragon 662:
+               POJAV_RENDERER=opengles2  -> GL4ES on top of GLES 2.0
+               LIBGL_ES=2                -> force the GLES 2 backend
+               LIBGL_MIPMAP=3            -> cheaper mipmap handling
+               LIBGL_NORMALIZE=1         -> fixes lighting normals in old fixed-function GL
+               LIBGL_NOINTOVLHACK=1      -> avoids an integer-overflow hack that costs time
+               LIBGL_NOERROR=1           -> skip glGetError bookkeeping (faster)
+               LIBGL_FASTMATH=1          -> faster matrix math
+               LIBGL_NOBANNER=1          -> no startup banner -->
+        <meta-data
+            android:name="pojavEnv"
+            android:value="POJAV_RENDERER=opengles2:LIBGL_ES=2:LIBGL_MIPMAP=3:LIBGL_NORMALIZE=1:LIBGL_NOINTOVLHACK=1:LIBGL_NOERROR=1:LIBGL_FASTMATH=1:LIBGL_NOBANNER=1" />
+
+    </application>
+</manifest>

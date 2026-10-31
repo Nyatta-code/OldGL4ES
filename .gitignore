@@ -1,0 +1,7 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+gl4es-src/
+app/src/main/jniLibs/
